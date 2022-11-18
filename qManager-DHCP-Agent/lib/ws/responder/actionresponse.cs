@@ -23,24 +23,51 @@ namespace qManager_DHCP_Agent.lib.ws.responder
             {
                 try
                 {
+                    string result = leaselib.delete(new Dictionary<string, dynamic>(rm.body.options));
                     //string result = printport.Create(rm.body.options.ip, 1, rm.body.options.ip, 9100, true);
-                    //if (result == null)
-                    //{
-                    body.result = "success";
-                    body.message = "The port was created successfully";
-                    //}
-                    //else
-                    //{
-                    //body.result = "error";
-                    //body.message = result;
-                    //}
-                    body.data = null;
-                    /*body.data = new Hashtable()
+                    if (result == null)
                     {
-                        {"name", rm.body.options.name },
+                        body.result = "success";
+                        body.message = "The lease was deleted successfully";
+                    }
+                    else
+                    {
+                        body.result = "error";
+                        body.message = result;
+                    }
+                    body.data = new Hashtable()
+                    {
                         {"rowId", rm.body.options.rowId },
                         {"server", rm.body.options.server }
-                    };*/
+                    };
+                }
+                catch (Exception e)
+                {
+                    lib.log el = new lib.log();
+                    el.write(e.ToString(), Environment.StackTrace, "error");
+                }
+            }
+            else if (path == "/dhcp/lease/reserve")
+            {
+                try
+                {
+                    string result = leaselib.reserve(new Dictionary<string, dynamic>(rm.body.options));
+                    //string result = printport.Create(rm.body.options.ip, 1, rm.body.options.ip, 9100, true);
+                    if (result == null)
+                    {
+                        body.result = "success";
+                        body.message = "The lease was reserved successfully";
+                    }
+                    else
+                    {
+                        body.result = "error";
+                        body.message = result;
+                    }
+                    body.data = new Hashtable()
+                    {
+                        {"rowId", rm.body.options.rowId },
+                        {"server", rm.body.options.server }
+                    };
                 }
                 catch (Exception e)
                 {

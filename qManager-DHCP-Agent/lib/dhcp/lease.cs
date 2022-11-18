@@ -31,8 +31,240 @@ namespace qManager_DHCP_Agent.lib.dhcp
     class lease
     {
         private runspace psr = new runspace();
+        private scope scopelib = new scope();
+        private reservation reservationlib = new reservation();
         private Dictionary<string, Dictionary<string, List<leaseobj>>> cachedobjects = new Dictionary<string, Dictionary<string, List<leaseobj>>>();
         private static readonly List<string> allowedindexes = new List<string> { "ClientId", "IPAddress" };
+        public string delete(Dictionary<string, dynamic> options)
+        {
+            Runspace psRunspace = psr.Get();
+
+            try
+            {
+                //if lease is a reservation, call function to delete reservation instead
+                if (options.ContainsKey("reservation"))
+                {
+                    if (options["reservation"] == true)
+                    {
+                        Console.WriteLine("Calling reservation deletion");
+                        return reservationlib.delete(options);
+                    }
+                }
+
+                using (var ps1 = PowerShell.Create())
+                {
+                    ps1.Runspace = psRunspace;
+                    ps1.AddCommand("Get-DhcpServerv4Lease");
+
+                    Dictionary<string, string> allowedprops = new Dictionary<string, string>();
+                    allowedprops.Add("clientid", "ClientId");
+                    allowedprops.Add("scopeid", "ScopeId");
+                    allowedprops.Add("ipaddress", "IPAddress");
+
+                    var keys1 = options.Keys;
+
+                    foreach (var k in keys1)
+                    {
+                        if (allowedprops.ContainsKey(k.ToLower()))
+                        {
+                            Console.WriteLine(allowedprops[k]);
+                            Console.WriteLine(options[k]);
+                            ps1.AddParameter(allowedprops[k], options[k]);
+                        }
+                    }
+
+                    Collection<System.Management.Automation.PSObject> PSOutput1 = ps1.Invoke();
+
+                    if (ps1.HadErrors)
+                    {
+                        List<string> errors = new List<string>();
+                        for (int i = 0; i < ps1.Streams.Error.Count; i++)
+                        {
+                            errors.Add(ps1.Streams.Error[i].ToString());
+                        }
+                        lib.log el = new lib.log();
+                        el.write(String.Join("", errors), Environment.StackTrace, "error");
+                        return errors[0];
+                    }
+                    if (PSOutput1.Count <= 0)
+                    {
+                        return "Failed to delete lease because more than one (" + PSOutput1.Count + ") was found for the given criteria. Only 1 was expected.";
+                    }
+                    else if (PSOutput1.Count > 1)
+                    {
+                        return "The lease could not be found on the server";
+                    }
+                    else
+                    {
+                        foreach (System.Management.Automation.PSObject obj1 in PSOutput1)
+                        {
+                            //if lease is a reservation, call function to delete reservation instead
+                            if (obj1.Properties["AddressState"].Value.ToString().ToLower().IndexOf("reservation") >= 0)
+                            {
+                                Console.WriteLine("Calling reservation deletion");
+                                return reservationlib.delete(options);
+                            }
+                            using (var ps2 = PowerShell.Create())
+                            {
+                                ps2.Runspace = psRunspace;
+                                ps2.AddCommand("Remove-DhcpServerv4Lease").AddParameter("ScopeId", obj1.Properties["ScopeId"].Value).AddParameter("ClientId", obj1.Properties["ClientId"].Value);
+
+                                Collection<System.Management.Automation.PSObject> PSOutput2 = ps2.Invoke();
+
+                                if (ps2.HadErrors)
+                                {
+                                    List<string> errors = new List<string>();
+                                    for (int i = 0; i < ps2.Streams.Error.Count; i++)
+                                    {
+                                        errors.Add(ps2.Streams.Error[i].ToString());
+                                    }
+                                    lib.log el = new lib.log();
+                                    el.write(String.Join("", errors), Environment.StackTrace, "error");
+                                    return errors[0];
+                                }
+                                else
+                                {
+                                    if (scopelib.checkFailoverRelationship(options["scopeid"]))
+                                    {
+                                        Console.WriteLine("Must replicate");
+                                        var repres = scopelib.replicate(options["scopeid"]);
+                                        if (repres == null)
+                                        {
+                                            return null;
+                                        }
+                                        else
+                                        {
+                                            return repres;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("No failover relationship found for " + options["scopeid"]);
+                                        return null;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                lib.log el = new lib.log();
+                el.write(e.ToString(), "", "error");
+                return e.ToString();
+            }
+            return null;
+        }
+        public string reserve(Dictionary<string, dynamic> options)
+        {
+            Runspace psRunspace = psr.Get();
+
+            try
+            {
+                using (var ps1 = PowerShell.Create())
+                {
+                    ps1.Runspace = psRunspace;
+                    ps1.AddCommand("Get-DhcpServerv4Lease");
+
+                    Dictionary<string, string> allowedprops = new Dictionary<string, string>();
+                    allowedprops.Add("clientid", "ClientId");
+                    allowedprops.Add("scopeid", "ScopeId");
+                    allowedprops.Add("ipaddress", "IPAddress");
+
+                    var keys1 = options.Keys;
+
+                    foreach (var k in keys1)
+                    {
+                        if (allowedprops.ContainsKey(k.ToLower()))
+                        {
+                            Console.WriteLine(allowedprops[k]);
+                            Console.WriteLine(options[k]);
+                            ps1.AddParameter(allowedprops[k], options[k]);
+                        }
+                    }
+
+                    Collection<System.Management.Automation.PSObject> PSOutput1 = ps1.Invoke();
+
+                    if (ps1.HadErrors)
+                    {
+                        List<string> errors = new List<string>();
+                        for (int i = 0; i < ps1.Streams.Error.Count; i++)
+                        {
+                            errors.Add(ps1.Streams.Error[i].ToString());
+                        }
+                        lib.log el = new lib.log();
+                        el.write(String.Join("", errors), Environment.StackTrace, "error");
+                        return errors[0];
+                    }
+                    if (PSOutput1.Count <= 0) {
+                        return "Failed to delete lease because more than one (" + PSOutput1.Count + ") was found for the given criteria. Only 1 was expected.";
+                    }
+                    else if (PSOutput1.Count > 1)
+                    {
+                        return "The lease could not be found on the server";
+                    }
+                    else
+                    {
+                        foreach (System.Management.Automation.PSObject obj1 in PSOutput1)
+                        {
+                            if (obj1.Properties["AddressState"].Value.ToString().ToLower().IndexOf("reservation") >= 0)
+                            {
+                                Console.WriteLine("The reservation already exists");
+                                return "The reservation already exists";
+                            }
+                            using (var ps2 = PowerShell.Create())
+                            {
+                                ps2.Runspace = psRunspace;
+                                ps2.AddCommand("Add-DhcpServerv4Reservation").AddParameter("ScopeId", obj1.Properties["ScopeId"].Value).AddParameter("ClientId", obj1.Properties["ClientId"].Value).AddParameter("IPAddress", obj1.Properties["IPAddress"].Value);
+
+                                Collection<System.Management.Automation.PSObject> PSOutput2 = ps2.Invoke();
+
+                                if (ps2.HadErrors)
+                                {
+                                    List<string> errors = new List<string>();
+                                    for (int i = 0; i < ps2.Streams.Error.Count; i++)
+                                    {
+                                        errors.Add(ps2.Streams.Error[i].ToString());
+                                    }
+                                    lib.log el = new lib.log();
+                                    el.write(String.Join("", errors), Environment.StackTrace, "error");
+                                    return errors[0];
+                                }
+                                else
+                                {
+                                    if (scopelib.checkFailoverRelationship(options["scopeid"]))
+                                    {
+                                        Console.WriteLine("Must replicate");
+                                        var repres = scopelib.replicate(options["scopeid"]);
+                                        if (repres == null)
+                                        {
+                                            return null;
+                                        }
+                                        else
+                                        {
+                                            return repres;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("No failover relationship found for " + options["scopeid"]);
+                                        return null;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                lib.log el = new lib.log();
+                el.write(e.ToString(), "", "error");
+                return e.ToString();
+            }
+            return null;
+        }
         public Dictionary<string, List<leaseobj>> GetAll(bool updatecache, string index)
         {
             Dictionary<string, List<leaseobj>> objects = new Dictionary<string, List<leaseobj>>();

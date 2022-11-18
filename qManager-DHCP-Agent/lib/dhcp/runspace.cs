@@ -9,13 +9,14 @@ namespace qManager_DHCP_Agent.lib.dhcp
 {
     class runspace
     {
-        private InitialSessionState sessionState;
-        private Runspace psRunspace;
+        private static InitialSessionState sessionState;
+        private static Runspace psRunspace;
 
         public Runspace Get()
         {
             if (sessionState == null)
             {
+                Console.WriteLine("CREATING NEW RUNSPACE");
                 sessionState = InitialSessionState.CreateDefault();
                 //Console.WriteLine(sessionState.ApartmentState);
                 sessionState.ImportPSModule(new string[] { "DHCPServer" });
@@ -25,6 +26,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
             }
             else
             {
+                Console.WriteLine("USING EXISTING RUNSPACE");
                 return psRunspace;
             }
         }

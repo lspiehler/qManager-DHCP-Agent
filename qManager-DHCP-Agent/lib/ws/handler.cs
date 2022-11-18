@@ -38,10 +38,20 @@ namespace qManager_DHCP_Agent.lib.ws
                 {
                     ar.ProcessResponse(clientWebSocket, message);
                 }
+                else if (message.body.path == "/dhcp/lease/delete")
+                {
+                    Console.WriteLine("got to lease handler");
+                    ar.ProcessResponse(clientWebSocket, message);
+                }
                 else if (message.body.path == "/dhcp/lease/list")
                 {
                     Console.WriteLine("got to lease handler");
                     qr.ProcessResponse(clientWebSocket, message);
+                }
+                else if (message.body.path == "/dhcp/lease/reserve")
+                {
+                    Console.WriteLine("got to lease handler");
+                    ar.ProcessResponse(clientWebSocket, message);
                 }
                 else
                 {
