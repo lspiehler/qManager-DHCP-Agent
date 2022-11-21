@@ -95,7 +95,9 @@ namespace qManager_DHCP_Agent.lib.ws
                     ctoken.Cancel();
                     ctoken.Dispose();
                 }
-                clientWebSocket.Dispose();
+                if (clientWebSocket != null) {
+                    clientWebSocket.Dispose();
+                }
             }
         }
 

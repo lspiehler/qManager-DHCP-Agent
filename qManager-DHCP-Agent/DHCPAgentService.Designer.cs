@@ -30,7 +30,7 @@ namespace qManager_DHCP_Agent
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            this.ServiceName = "DHCP Management";
         }
 
         #endregion
