@@ -59,9 +59,14 @@ namespace qManager_DHCP_Agent.lib.ws.responder
                     //pslib.getPrinter getprinter = new pslib.getPrinter();
                     try
                     {
+                        string reqindex = "ClientId";
+                        if (commonlib.PropertyExists(rm.body.options, "index"))
+                        {
+                            reqindex = rm.body.options.index;
+                        }
                         body.result = "success";
                         body.message = null;
-                        body.data = new Hashtable(leaselib.GetAll(updatecache, "ClientId"));
+                        body.data = new Hashtable(leaselib.GetAll(updatecache, reqindex));
                         //Console.WriteLine(JsonConvert.SerializeObject(rm, Formatting.Indented));
                     }
                     catch (Exception e)

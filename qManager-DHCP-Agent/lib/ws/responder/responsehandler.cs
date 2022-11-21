@@ -39,9 +39,9 @@ namespace qManager_DHCP_Agent.lib.ws.responder
 
         private async Task sendHandler()
         {
+            sending = true;
             try
             {
-                sending = true;
                 for (int i = sendqueue.Count - 1; i >= 0; i--)
                 {
                     //Thread.Sleep(4000);

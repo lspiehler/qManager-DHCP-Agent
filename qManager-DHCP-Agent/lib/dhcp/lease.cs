@@ -7,7 +7,7 @@ using System.Management.Automation.Runspaces;
 using System.Management.Automation;
 using System.Collections;
 using System.Collections.ObjectModel;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace qManager_DHCP_Agent.lib.dhcp
 {
@@ -267,6 +267,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
         }
         public Dictionary<string, List<leaseobj>> GetAll(bool updatecache, string index)
         {
+            //Console.WriteLine(index);
             Dictionary<string, List<leaseobj>> objects = new Dictionary<string, List<leaseobj>>();
             if (allowedindexes.IndexOf(index) < 0)
             {
@@ -388,7 +389,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                     {
                         cachedobjects.Add(index, objects);
                     }
-                    //Console.WriteLine(JsonConvert.SerializeObject(new Hashtable(objects)));
+                    //Console.WriteLine(JsonConvert.SerializeObject(new Hashtable(objects), Formatting.Indented));
                     //Console.WriteLine(DateTime.Now);
                     return objects;
                 }
