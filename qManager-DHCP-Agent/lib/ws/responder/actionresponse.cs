@@ -83,7 +83,7 @@ namespace qManager_DHCP_Agent.lib.ws.responder
                 {
                     {"hostname", commonlib.GetLocalhostFqdn()},
                     {"agentType", "dhcp" },
-                    {"agentVersion", "0.04" }
+                    {"agentVersion", "0.6" }
                 };
             }
             else
