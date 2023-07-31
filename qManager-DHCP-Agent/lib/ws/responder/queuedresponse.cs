@@ -31,7 +31,7 @@ namespace qManager_DHCP_Agent.lib.ws.responder
 
             if (cachedtypes.ContainsKey(path) == false)
             {
-                Console.WriteLine("Creating key " + path);
+                Console.WriteLine(DateTime.Now.ToString() + " Creating key " + path);
                 ResponderLibCache rlc = new ResponderLibCache();
                 //rlc.clients = new List<System.Net.WebSockets.Managed.ClientWebSocket>();
                 //rlc.clients.Add(rm.id, ws);
@@ -43,7 +43,7 @@ namespace qManager_DHCP_Agent.lib.ws.responder
             if (cachedtypes[path].clients.Count > 0)
             {
                 // just add pending request to the queue
-                Console.WriteLine("Adding pending request to the queue");
+                Console.WriteLine(DateTime.Now.ToString() + " Adding pending request to the queue");
                 cachedtypes[path].clients.Add(rm.id, ws);
             }
             else
@@ -91,12 +91,13 @@ namespace qManager_DHCP_Agent.lib.ws.responder
 
                 }
 
-                Console.WriteLine("Responding to all requests");
+                Console.WriteLine(DateTime.Now.ToString() + " Responding to all queued requests");
 
-                List<string> clientkeys = new List<string>(cachedtypes[path].clients.Keys);
-
-                for (int i = cachedtypes[path].clients.Count - 1; i >= 0; i--)
+                //for (int i = cachedtypes[path].clients.Count - 1; i >= 0; i--)
+                while (cachedtypes[path].clients.Count > 0)
                 {
+                    List<string> clientkeys = new List<string>(cachedtypes[path].clients.Keys);
+                    int i = clientkeys.Count - 1;
 
                     HashTableResponse resp = new HashTableResponse();
 
@@ -144,7 +145,7 @@ namespace qManager_DHCP_Agent.lib.ws.responder
                     }
                 }
 
-                Console.WriteLine(cachedtypes[path].clients.Count + " remaining");
+                Console.WriteLine(DateTime.Now.ToString() + " " + cachedtypes[path].clients.Count + " remaining");
             }
         }
     }
