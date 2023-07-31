@@ -2796,7 +2796,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DHCP Management"
         "ProductCode" = "8:{D88C45B0-F979-4452-A35A-DA5E68C349DD}"
-        "PackageCode" = "8:{FC3123CA-28A5-48B7-9E3C-51EE8CBF9571}"
+        "PackageCode" = "8:{01156A9D-F67F-48EE-8E0C-DE1BC82E4D20}"
         "UpgradeCode" = "8:{B29BD68B-2E13-4304-BC46-3E8407965983}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2819,7 +2819,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:xcopy /Y \"C:\\Users\\LyasSpiehler\\source\\repos\\qManager-DHCP-Agent\\InstallDHCPManagement\\Debug\\InstallDHCPManagement.msi\" Z:\\dev\\DHCPManagement\\"
+        "PostBuildEvent" = "8:xcopy /Y \"C:\\Users\\LyasSpiehler\\source\\repos\\qManager-DHCP-Agent\\InstallDHCPManagement\\Release\\InstallDHCPManagement.msi\" Z:\\dev\\DHCPManagement\\"
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"

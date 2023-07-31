@@ -23,6 +23,8 @@ namespace qManager_DHCP_Agent.lib.dhcp
                     ps1.Runspace = psRunspace;
                     ps1.AddCommand("Get-DhcpServerv4Failover").AddParameter("ScopeId", scopeid);
 
+                    Collection<System.Management.Automation.PSObject> PSOutput1 = ps1.Invoke();
+
                     if (ps1.HadErrors)
                     {
                         /*List<string> errors = new List<string>();
@@ -37,7 +39,18 @@ namespace qManager_DHCP_Agent.lib.dhcp
                     }
                     else
                     {
-                        return true;
+                        int count = 0;
+                        foreach (System.Management.Automation.PSObject obj1 in PSOutput1)
+                        {
+                            count++;
+                        }
+                        if (count > 0) {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
             }
