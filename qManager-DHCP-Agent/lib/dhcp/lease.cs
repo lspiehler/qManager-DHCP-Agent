@@ -46,7 +46,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                 {
                     if (options["reservation"] == true)
                     {
-                        Console.WriteLine("Calling reservation deletion");
+                        Console.WriteLine(DateTime.Now.ToString() + " Calling reservation deletion");
                         return reservationlib.delete(options);
                     }
                 }
@@ -67,8 +67,8 @@ namespace qManager_DHCP_Agent.lib.dhcp
                     {
                         if (allowedprops.ContainsKey(k.ToLower()))
                         {
-                            Console.WriteLine(allowedprops[k]);
-                            Console.WriteLine(options[k]);
+                            Console.WriteLine(DateTime.Now.ToString() + " " + allowedprops[k]);
+                            Console.WriteLine(DateTime.Now.ToString() + " " + options[k]);
                             ps1.AddParameter(allowedprops[k], options[k]);
                         }
                     }
@@ -101,7 +101,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                             //if lease is a reservation, call function to delete reservation instead
                             if (obj1.Properties["AddressState"].Value.ToString().ToLower().IndexOf("reservation") >= 0)
                             {
-                                Console.WriteLine("Calling reservation deletion");
+                                Console.WriteLine(DateTime.Now.ToString() + " Calling reservation deletion");
                                 return reservationlib.delete(options);
                             }
                             using (var ps2 = PowerShell.Create())
@@ -126,7 +126,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                                 {
                                     if (scopelib.checkFailoverRelationship(options["scopeid"]))
                                     {
-                                        Console.WriteLine("Must replicate");
+                                        Console.WriteLine(DateTime.Now.ToString() + " Must replicate");
                                         var repres = scopelib.replicate(options["scopeid"]);
                                         if (repres == null)
                                         {
@@ -139,7 +139,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                                     }
                                     else
                                     {
-                                        Console.WriteLine("No failover relationship found for " + options["scopeid"]);
+                                        Console.WriteLine(DateTime.Now.ToString() + " No failover relationship found for " + options["scopeid"]);
                                         return null;
                                     }
                                 }
@@ -178,8 +178,8 @@ namespace qManager_DHCP_Agent.lib.dhcp
                     {
                         if (allowedprops.ContainsKey(k.ToLower()))
                         {
-                            Console.WriteLine(allowedprops[k]);
-                            Console.WriteLine(options[k]);
+                            Console.WriteLine(DateTime.Now.ToString() + " " + allowedprops[k]);
+                            Console.WriteLine(DateTime.Now.ToString() + " " + options[k]);
                             ps1.AddParameter(allowedprops[k], options[k]);
                         }
                     }
@@ -210,7 +210,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                         {
                             if (obj1.Properties["AddressState"].Value.ToString().ToLower().IndexOf("reservation") >= 0)
                             {
-                                Console.WriteLine("The reservation already exists");
+                                Console.WriteLine(DateTime.Now.ToString() + " The reservation already exists");
                                 return "The reservation already exists";
                             }
                             using (var ps2 = PowerShell.Create())
@@ -235,7 +235,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                                 {
                                     if (scopelib.checkFailoverRelationship(options["scopeid"]))
                                     {
-                                        Console.WriteLine("Must replicate");
+                                        Console.WriteLine(DateTime.Now.ToString() + " Must replicate");
                                         var repres = scopelib.replicate(options["scopeid"]);
                                         if (repres == null)
                                         {
@@ -248,7 +248,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                                     }
                                     else
                                     {
-                                        Console.WriteLine("No failover relationship found for " + options["scopeid"]);
+                                        Console.WriteLine(DateTime.Now.ToString() + " No failover relationship found for " + options["scopeid"]);
                                         return null;
                                     }
                                 }

@@ -29,7 +29,7 @@ namespace qManager_DHCP_Agent
                 lib.ws.client wsclient = new lib.ws.client();
                 wsclient.initiateWebSocket();
 
-                Console.WriteLine("Opening socket");
+                Console.WriteLine(DateTime.Now.ToString() + " Opening socket");
                 /*Console.WriteLine("Starting HTTP listener...");
 
                 //var httpServer = new HttpServer();
@@ -47,7 +47,7 @@ namespace qManager_DHCP_Agent
 
                 // main blocks here waiting for ctrl-C
                 autoResetEvent.WaitOne();
-                Console.WriteLine("Now shutting down");
+                Console.WriteLine(DateTime.Now.ToString() + " Now shutting down");
 
                 //wsclient.getSocket().Abort();
                 //if (wsclient.getState() == "Open") {

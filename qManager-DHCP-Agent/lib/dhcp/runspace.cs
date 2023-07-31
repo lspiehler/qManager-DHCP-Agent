@@ -16,7 +16,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
         {
             if (sessionState == null)
             {
-                Console.WriteLine("CREATING NEW RUNSPACE");
+                Console.WriteLine(DateTime.Now.ToString() + " CREATING NEW RUNSPACE");
                 sessionState = InitialSessionState.CreateDefault();
                 //Console.WriteLine(sessionState.ApartmentState);
                 sessionState.ImportPSModule(new string[] { "DHCPServer" });
@@ -26,7 +26,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
             }
             else
             {
-                Console.WriteLine("USING EXISTING RUNSPACE");
+                Console.WriteLine(DateTime.Now.ToString() + " USING EXISTING RUNSPACE");
                 return psRunspace;
             }
         }

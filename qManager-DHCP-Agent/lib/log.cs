@@ -45,12 +45,12 @@ namespace qManager_DHCP_Agent.lib
 
             if (type == "error")
             {
-                Console.WriteLine(message + "\r\n" + st);
+                Console.WriteLine(DateTime.Now.ToString() + " " + message + "\r\n" + st);
 
             }
             else
             {
-                Console.WriteLine(message);
+                Console.WriteLine(DateTime.Now.ToString() + " " + message);
             }
 
             var appLog = new EventLog("Application");

@@ -24,11 +24,11 @@ namespace qManager_DHCP_Agent.lib.ws
             }
             else
             {
-                Console.WriteLine("The connection to the server failed. Trying again...");
+                Console.WriteLine(DateTime.Now.ToString() + " The connection to the server failed. Trying again...");
                 ctoken.Cancel();
             }
-            Console.WriteLine("Timer expired");
-            Console.WriteLine(clientWebSocket.State.ToString());
+            Console.WriteLine(DateTime.Now.ToString() + " Timer expired");
+            Console.WriteLine(DateTime.Now.ToString() + " " + clientWebSocket.State.ToString());
             clientWebSocket.Dispose();
             ctoken.Dispose();
             //clientWebSocket = new System.Net.WebSockets.Managed.ClientWebSocket();
@@ -40,7 +40,7 @@ namespace qManager_DHCP_Agent.lib.ws
         {
             if (timer.Enabled)
             {
-                Console.WriteLine("Timer interrupted");
+                Console.WriteLine(DateTime.Now.ToString() + " Timer interrupted");
                 timer.Stop();
                 timer.Start();
             }
@@ -172,13 +172,13 @@ namespace qManager_DHCP_Agent.lib.ws
 
             if (config["Proxy"] != null)
             {
-                Console.WriteLine("Using proxy " + config["Proxy"]);
+                Console.WriteLine(DateTime.Now.ToString() + " Using proxy " + config["Proxy"]);
                 System.Net.WebProxy proxy = new System.Net.WebProxy(config["Proxy"]);
 
                 clientWebSocket.Options.Proxy = proxy;
             }
 
-            Console.WriteLine("Opening web socket");
+            Console.WriteLine(DateTime.Now.ToString() + " Opening web socket");
 
             processTimer();
 
@@ -191,7 +191,7 @@ namespace qManager_DHCP_Agent.lib.ws
             {
                 lib.log el = new lib.log();
                 el.write(e.ToString(), Environment.StackTrace, "error");
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(DateTime.Now.ToString() + " " + e.ToString());
             }
 
             //Console.WriteLine("done");
@@ -214,7 +214,7 @@ namespace qManager_DHCP_Agent.lib.ws
                 {
                     //Console.WriteLine(Encoding.UTF8.GetString(bytesReceived.Array, 0, result.Count));
 
-                    Console.WriteLine("waiting for messages");
+                    Console.WriteLine(DateTime.Now.ToString() + " waiting for messages");
                     ArraySegment<byte> bytesReceived = new ArraySegment<byte>(new byte[1024]);
 
                     WebSocketReceiveResult result = await clientWebSocket.ReceiveAsync(

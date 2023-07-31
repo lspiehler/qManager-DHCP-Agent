@@ -36,8 +36,8 @@ namespace qManager_DHCP_Agent.lib.dhcp
                     {
                         if (allowedprops.ContainsKey(k.ToLower()))
                         {
-                            Console.WriteLine(allowedprops[k]);
-                            Console.WriteLine(options[k]);
+                            Console.WriteLine(DateTime.Now.ToString() + " " + allowedprops[k]);
+                            Console.WriteLine(DateTime.Now.ToString() + " " + options[k]);
                             ps1.AddParameter(allowedprops[k], options[k]);
                         }
                     }
@@ -89,7 +89,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                                 {
                                     if (scopelib.checkFailoverRelationship(options["scopeid"]))
                                     {
-                                        Console.WriteLine("Must replicate");
+                                        Console.WriteLine(DateTime.Now.ToString() + " Must replicate");
                                         var repres = scopelib.replicate(options["scopeid"]);
                                         if (repres == null)
                                         {
@@ -102,7 +102,7 @@ namespace qManager_DHCP_Agent.lib.dhcp
                                     }
                                     else
                                     {
-                                        Console.WriteLine("No failover relationship for " + options["scopeid"]);
+                                        Console.WriteLine(DateTime.Now.ToString() + " No failover relationship for " + options["scopeid"]);
                                         return null;
                                     }
                                 }

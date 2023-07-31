@@ -24,13 +24,13 @@ namespace qManager_DHCP_Agent.lib.ws
         {
             String response = Encoding.UTF8.GetString(bytesReceived.Array, 0, result.Count);
 
-            Console.WriteLine(response);
+            Console.WriteLine(DateTime.Now.ToString() + " " + response);
 
             //dynamic message = JsonConvert.DeserializeObject<dynamic>(response);
             dynamic message = JsonConvert.DeserializeObject<ExpandoObject>(response);
 
-            Console.WriteLine(message.type);
-            Console.WriteLine(message.body.path);
+            Console.WriteLine(DateTime.Now.ToString() + " " + message.type);
+            Console.WriteLine(DateTime.Now.ToString() + " " + message.body.path);
 
             if (message.type == "request")
             {
@@ -40,17 +40,17 @@ namespace qManager_DHCP_Agent.lib.ws
                 }
                 else if (message.body.path == "/dhcp/lease/delete")
                 {
-                    Console.WriteLine("got to lease handler");
+                    //Console.WriteLine(DateTime.Now.ToString() + " got to lease handler");
                     ar.ProcessResponse(clientWebSocket, message);
                 }
                 else if (message.body.path == "/dhcp/lease/list")
                 {
-                    Console.WriteLine("got to lease handler");
+                    //Console.WriteLine(DateTime.Now.ToString() + " got to lease handler");
                     qr.ProcessResponse(clientWebSocket, message);
                 }
                 else if (message.body.path == "/dhcp/lease/reserve")
                 {
-                    Console.WriteLine("got to lease handler");
+                    //Console.WriteLine(DateTime.Now.ToString() + " got to lease handler");
                     ar.ProcessResponse(clientWebSocket, message);
                 }
                 else
